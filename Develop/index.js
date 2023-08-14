@@ -1,71 +1,78 @@
-// TODO: Include packages needed for this application
-import inquirer from 'inquirer';
+// Include packages needed for this application
 import fs from 'fs';
-import { generateMarkdown } from './utils/generateMarkdown.js';
-// TODO: Create an array of questions for user input
-const questions = [];
+import inquirer from 'inquirer';
+import { generateMarkdown } from './utils/generateMarkdown';
 
-// TODO: Create a function to write README file
-// function writeToFile(fileName, data) {}
+const licenses = ['None', 'MIT', 'BSD', 'GPL', 'Apache'];
 
-// TODO: Create a function to initialize app
+// Create an array of questions for user input
+const questions = [
+    {
+        type: 'input',
+        name: 'title',
+        message: 'Enter the project title:'
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Enter a description of your project:'
+    },
+    {
+        type: 'input',
+        name: 'install',
+        message: 'Enter the installation instructions:'
+    },
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'Enter the information on how to use this project:'
+    },
+    {
+        type: 'input',
+        name: 'guidelines',
+        message: 'Enter the contribution guidelines:'
+    },
+    {
+        type: 'input',
+        name: 'test',
+        message: 'Enter the test instructions:'
+    },
+    {
+        type: 'list',
+        name: 'license',
+        message: 'Enter project license:',
+        choices: licenses
+    },
+    {
+        type: 'input',
+        message: 'Enter your github username:',
+        name: 'username'
+    },
+    {
+        type: 'input',
+        message: 'Enter your email address:',
+        name: 'email'
+    }
+];
+
+// Create a function to write README file
+function writeToFile(data) {
+    const filename = "./dist/README.md";
+
+    fs.writeFile(filename, data, function (err) {
+        err ? console.log(err) : console.log(filename + " created!");
+    });
+}
+
+// Create a function to initialize app
 function init() {
-    inquirer.prompt([
-            {
-              type: "input",
-              name: "title",
-              message: "What is the title?",
-            },
-            {
-              type: "input",
-              name: "description",
-              message: "What is the description?",
-            },
-            {
-              type: "input",
-              name: "imageALT",
-              message: "What is the imageAlt?",
-            },
-            {
-              type: "input",
-              name: "imageURL",
-              message: "What is the image URL?",
-            },
-            {
-              type: "list",
-              name: "license",
-              message: "What is the license?",
-              choices: [
-                { name: "MIT" },
-                { name: "Apache" },
-                { name: "GPL" },
-                { name: "BSD" },
-                { name: "None" },
-              ],
-            },
-        ])};
-          
-          function init() {
-            inquirer
-              .prompt(questions)
-              .then((response) => {
-                // The user's responses are available in the "response" object
-                // Call your writeToFile function here and pass "response" as the data
-                writeToFile('generatedREADME.md', response);
-              })
-              .catch((error) => {
-                console.error("Error occurred:", error);
-              });
-          }
-        ]).then((response) => {
-        fs.writeFile("generatedREADME.md", generateMarkdown(response), (err) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("README.md created");
-            }
-          });
-          
+    inquirer.prompt(questions)
+    .then(answers => writeToFile(generateMarkdown(answers)))
+    .catch(error => {
+        console.error("Error occurred:", error);
+    });
+}
 
 // Function call to initialize app
 init();
+
