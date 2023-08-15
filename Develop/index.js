@@ -1,7 +1,7 @@
 // Include packages needed for this application
 import fs from 'fs';
 import inquirer from 'inquirer';
-import { generateMarkdown } from './utils/generateMarkdown';
+import { generateMarkdown } from './utils/generateMarkdown.js';
 
 const licenses = ['None', 'MIT', 'BSD', 'GPL', 'Apache'];
 
